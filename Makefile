@@ -15,6 +15,7 @@ CXXFLAGS+=$(foreach i, $(INCLUDES), -I$i)
 SOURCE=
 SOURCE+=./main.cpp
 SOURCE+=./utils/TcpServer.cpp
+SOURCE+=./utils/TcpClient.cpp
 
 all: $(BINARY)
 

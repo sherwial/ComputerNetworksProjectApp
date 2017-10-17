@@ -52,8 +52,32 @@ int main(int argc, char * argv[])
 			
 		} // if
 
-		if ( argv[1] == "--transmit" )
+		if ( argv1 == "--transmit" )
 		{
+			std::ifstream in;
+			TcpClient client;
+			int buffer_length = 1024;
+			char * buffer = (char *)malloc(buffer_length);
+			std::string filename;
+
+			while (1)
+			{
+				// Get the filename from the user
+				std::cin >> filename;
+				// Open the file
+				in.open(filename.c_str());
+
+				// Transmit each 1024 group of bytes at a time
+				while (in)
+				{
+					in.read(buffer, 1024);
+					client.Send(buffer, 1024);
+				} // while
+
+				in.close();
+			} // while
+
+			in.open(argv1.c_str());
 
 		} // if
 		
@@ -66,5 +90,5 @@ void printHelpMenu()
 	std::cout << "Argument List:" << std::endl << std::endl;
 	std::cout << "\t--receive [IP]" << std::endl;
 	std::cout << "\t--relay-list [IP List text file]" << std::endl;
-	std::cout << "\t--transmit [text-file]" << std::endl;
+	std::cout << "\t--transmit ip port" << std::endl;
 } // printHelpMenu
