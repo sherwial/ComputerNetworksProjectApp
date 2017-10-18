@@ -27,13 +27,17 @@ int main(int argc, char * argv[])
 			std::ifstream in;
 			std::string nextLine;
 			std::vector<std::string> list;
-			int port; // Port for transmit
+			std::string address; // Port for transmit
+			std::string ip;
+			int port;
 
 			in.open(argv[2]); // Open file stream
 
-			getline(in, nextLine);
-			port = atoi(nextLine.c_str());
-			std::cout << port << std::endl;
+			getline(in, address);
+			int position = address.find(':');
+			ip = address.substr(0, position);
+			port = atoi((address.substr(position+1, address.length())).c_str());
+			std::cout << "(" << ip << "," << port << ")" << std::endl;
 
 			while ( getline(in, nextLine) )
 			{
@@ -42,23 +46,31 @@ int main(int argc, char * argv[])
 
 			in.close(); // Close file stream
 
-			bool bound = server.Bind("128.153.180.189",port);
+			bool bound = server.Bind(ip.c_str(),port);
 
-			std::cout << bound << " is bound" << std::endl;
 			server.Listen(3);
 
 			int socketnew;
 			server.Accept(socketnew);
+
+			uint8_t * buffer = (uint8_t *)malloc(1024);
+			server.Read(socketnew, buffer, 1024);
+			std::cout << buffer << std::endl;
 			
 		} // if
 
 		if ( argv1 == "--transmit" )
 		{
 			std::ifstream in;
+			std::string ip;
+			int port;
 			TcpClient client;
 			int buffer_length = 1024;
-			char * buffer = (char *)malloc(buffer_length);
+			unsigned char * buffer = (unsigned char *)malloc(buffer_length);
 			std::string filename;
+
+			port = atoi(argv[3]);
+			client.Connect(ip, port);
 
 			while (1)
 			{
@@ -70,8 +82,8 @@ int main(int argc, char * argv[])
 				// Transmit each 1024 group of bytes at a time
 				while (in)
 				{
-					in.read(buffer, 1024);
-					client.Send(buffer, 1024);
+					in.read(reinterpret_cast<char *>(buffer), 1024);
+					client.Send(reinterpret_cast<uint8_t *>(buffer), 1024);
 				} // while
 
 				in.close();

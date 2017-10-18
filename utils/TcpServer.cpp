@@ -58,10 +58,9 @@ bool TcpServer::Accept(int & new_socket)
 	return 1;
 }
 
-bool TcpServer::Read(int accepted_socket,char * buffer, int buffer_length)
+bool TcpServer::Read(int accepted_socket, uint8_t * buffer, int buffer_length)
 {
 	val_from_read = read( accepted_socket, buffer, buffer_length );
-	std::cout << buffer << std::endl;
 
 	send(accepted_socket , returnMessageBuffer , messageConfirmationLength , 0 );
 } // read

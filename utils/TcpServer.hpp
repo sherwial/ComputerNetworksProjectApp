@@ -20,7 +20,7 @@ public:
 
 	bool Accept(int & new_socket);
 
-	bool Read(int accepted_socket, char * buffer, int buffer_length);
+	bool Read(int accepted_socket, uint8_t * buffer, int buffer_length);
 
 private:
 
