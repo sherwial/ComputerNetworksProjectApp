@@ -18,6 +18,17 @@ int main(int argc, char * argv[])
 		std::string argv1 = argv[1];
 		if ( argv1 == "--receive" )
 		{
+			// Create a socket
+
+			// Listen for a connection
+
+			// Receive intial packet
+				// Initiali packet will contain information about the next packets
+
+			// Continue receiving the message
+
+			// Wait again
+
 		} // if
 
 		if ( argv1 == "--relay-list" )
